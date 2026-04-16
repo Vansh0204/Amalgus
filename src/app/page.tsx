@@ -13,6 +13,7 @@ export default function DiscoveryPage() {
   const [maxPrice, setMaxPrice] = useState(10000);
   const [minThickness, setMinThickness] = useState(0);
   const [maxThickness, setMaxThickness] = useState(30);
+  const [errorStatus, setErrorStatus] = useState<string | null>(null);
 
   const categories = [
     "Float Glass",
@@ -50,10 +51,17 @@ export default function DiscoveryPage() {
         }),
       });
       const data = await response.json();
-      setResults(data.results || []);
-      setIntent(data.intent || null);
-    } catch (error) {
+      if (!response.ok) {
+        setErrorStatus(data.error || "Something went wrong. Please check your API key.");
+        setResults([]);
+      } else {
+        setResults(data.results || []);
+        setIntent(data.intent || null);
+        setErrorStatus(null);
+      }
+    } catch (error: any) {
       console.error("Search failed:", error);
+      setErrorStatus("Connection failed. Are you online?");
     } finally {
       setLoading(false);
     }
@@ -174,7 +182,12 @@ export default function DiscoveryPage() {
                 >
                   {loading ? "Discovering..." : "Find Best Matches"}
                 </button>
+                {errorStatus && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium">
+                ⚠️ {errorStatus}
               </div>
+            )}
+          </div>
             </div>
 
             {intent && !loading && (
