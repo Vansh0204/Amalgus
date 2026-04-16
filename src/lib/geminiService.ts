@@ -102,7 +102,7 @@ function localFallback(buyerQuery: string, products: any[]) {
       };
     })
     .sort((a, b) => b.score - a.score)
-    .filter(m => m.score > 20) // Filter out low quality results
+    .filter(m => m.score > 10) // More lenient filter to ensure UI is populated
     .slice(0, 12);
 
   return { 
