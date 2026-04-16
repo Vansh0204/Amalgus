@@ -64,7 +64,7 @@ function localFallback(buyerQuery: string, products: any[]) {
 
   const topMatches = products
     .map(p => {
-      let score = 15; // Lower base score
+      let score = 0; // Base score must be 0 for accuracy
       const matched: string[] = [];
       const pThickness = p.specs.thickness.toLowerCase();
 
