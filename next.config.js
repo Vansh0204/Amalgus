@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ["@anthropic-ai/sdk"],
+  // Configured for Next.js 14 compatibility
 };
 
 module.exports = nextConfig;

@@ -54,8 +54,8 @@ export async function POST(request: Request) {
 
     // 3. Merge matching scores/reasons with full product metadata
     const enrichedResults = matchResults.matches
-      .map((match) => {
-        const product = MOCK_PRODUCTS.find((p) => p.id === match.productId);
+      .map((match: any) => {
+        const product = MOCK_PRODUCTS.find((p: any) => p.id === match.productId);
         if (!product) return null;
 
         return {
