@@ -62,7 +62,7 @@ function localFallback(buyerQuery: string, products: any[]) {
   const topMatches = products
     .map(p => {
       let score = 15; // Lower base score
-      const matched = [];
+      const matched: string[] = [];
       const pThickness = p.specs.thickness.toLowerCase();
 
       // HEAVY PRIORITY: Thickness Match
