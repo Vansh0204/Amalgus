@@ -203,36 +203,75 @@ export default function DiscoveryPage() {
                 <div className="text-center py-10 text-slate-400">Loading matches...</div>
               ) : results.length > 0 ? (
                 results.map((product: any) => (
-                  <div key={product.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-blue-300 transition-all">
-                    <div className="flex flex-col md:flex-row justify-between gap-6 uppercase">
-                      <div className="flex-1 space-y-4">
-                        <div className="flex items-center gap-3">
-                          <h3 className="text-xl font-black text-slate-800">{product.name}</h3>
-                          <span className="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded">{product.category}</span>
-                        </div>
-                        <p className="text-sm text-slate-500 italic">Supplier: {product.supplier.name}</p>
-                        <div className="p-4 bg-slate-50 rounded-xl border-l-4 border-blue-500">
-                          <p className="text-sm leading-relaxed text-slate-600 italic">
-                            {product.matchReason}
-                          </p>
-                        </div>
+                  <div key={product.id} className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 hover:border-blue-400 transition-all group overflow-hidden relative">
+                    {/* Top Section: Title and Price */}
+                    <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors uppercase leading-tight mb-1">
+                          {product.name}
+                        </h3>
+                        <p className="text-slate-500 font-medium italic underline decoration-slate-200 uppercase tracking-tighter">
+                          {product.supplier.name}
+                        </p>
                       </div>
+                      <div className="text-right flex flex-col items-end">
+                        <div className="text-3xl font-black text-slate-900 leading-none">
+                          ₹{product.pricePerSqm || "Custom"}
+                        </div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase mt-1 tracking-widest">PER SQM</div>
+                      </div>
+                    </div>
 
-                      <div className="md:w-64 space-y-4 md:border-l md:pl-6 border-slate-100 flex flex-col justify-center">
-                        <div className="flex justify-between items-end mb-1">
-                          <span className="text-xs font-bold text-slate-400 uppercase">Match Score</span>
-                          <span className="text-2xl font-black text-blue-600">{product.matchScore}%</span>
-                        </div>
-                        <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-blue-500 transition-all duration-1000" 
-                            style={{ width: `${product.matchScore}%` }}
-                          ></div>
-                        </div>
-                        <div className="pt-2">
-                          <p className="text-xl font-black text-slate-800">₹{product.pricePerSqm || "Custom"}/sqm</p>
-                        </div>
+                    {/* Match Score Bar */}
+                    <div className="mb-8">
+                      <div className="flex justify-between items-end mb-2">
+                        <span className="text-sm font-bold text-slate-400 uppercase tracking-wider">Match Score</span>
+                        <span className={`text-xl font-black ${product.matchScore > 70 ? 'text-green-500' : 'text-blue-500'}`}>
+                          {product.matchScore}%
+                        </span>
                       </div>
+                      <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full transition-all duration-1000 ${product.matchScore > 70 ? 'bg-green-500' : 'bg-blue-500'}`} 
+                          style={{ width: `${product.matchScore}%` }}
+                        ></div>
+                      </div>
+                    </div>
+
+                    {/* Specifications Section */}
+                    <div className="mb-8">
+                      <div className="text-[10px] font-bold text-slate-400 uppercase mb-3 tracking-widest">Specifications</div>
+                      <div className="flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-tight">
+                        <span className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg border border-blue-100">{product.specs.thickness}</span>
+                        <span className="px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg border border-slate-200">{product.category}</span>
+                        <span className="px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg border border-indigo-100">{product.specs.colorTint}</span>
+                        {product.specs.coating !== "None" && (
+                          <span className="px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg border border-amber-100 italic">Coated</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Features and Usage */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                      <div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Best For</div>
+                        <p className="text-sm font-bold text-slate-700 uppercase tracking-tight leading-relaxed">
+                          {product.tags.filter((t: string) => !["basic", "float", "tempered"].includes(t)).join(", ") || "General Construction"}
+                        </p>
+                      </div>
+                      <div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Key Feature</div>
+                        <p className="text-sm text-slate-600 leading-relaxed italic">
+                          {product.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-slate-100 pt-6">
+                      <div className="text-[10px] font-bold text-slate-400 uppercase mb-3 tracking-widest">Why this fits your requirement</div>
+                      <p className="text-slate-700 leading-relaxed font-medium">
+                        {product.matchReason}
+                      </p>
                     </div>
                   </div>
                 ))
