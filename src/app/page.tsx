@@ -162,6 +162,12 @@ export default function DiscoveryPage() {
                 placeholder="Example: I need safe 8mm glass for office cubicles..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSearch();
+                  }
+                }}
               />
               <div className="mt-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex flex-wrap gap-2 text-slate-800">
