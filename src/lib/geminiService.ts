@@ -43,7 +43,10 @@ export async function matchProducts(buyerQuery: string, products: any[]) {
         });
         const prompt = `${MATCHING_SYSTEM_PROMPT}\n\n${getMatchingUserMessage(buyerQuery, candidates)}`;
         const res = await model.generateContent(prompt);
-        return JSON.parse(res.response.text());
+        let text = res.response.text();
+        // Clean up markdown backticks if present
+        text = text.replace(/```json|```/g, "").trim();
+        return JSON.parse(text);
       })
     );
     return result;
@@ -84,9 +87,20 @@ function localFallback(buyerQuery: string, products: any[]) {
         }
       });
 
+      // SAFETY BOOSTER
+      const safetyKeywords = ["safe", "safety", "balcony", "railing", "overhead", "partition"];
+      if (safetyKeywords.some(k => queryLower.includes(k))) {
+        if (p.category.includes("Tempered") || p.category.includes("Laminated")) {
+          score += 50;
+          matched.push("Safety Standard");
+        } else {
+          score -= 30; // Penalize non-safety glass for safety queries
+        }
+      }
+
       // Keyword matching
       p.tags.forEach((t: string) => {
-        if (queryLower.includes(t.toLowerCase()) && !matched.includes(t.toLowerCase())) {
+        if (queryLower.includes(t.toLowerCase()) && !matched.map(m => m.toLowerCase()).includes(t.toLowerCase())) {
           score += 15;
           matched.push(t);
         }
