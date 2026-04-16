@@ -7,9 +7,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { query, filters } = body;
 
-    if (!query) {
+    // We allow empty query if category is selected
+    if (!query && (!filters || !filters.category)) {
       return NextResponse.json(
-        { error: "Query is required" },
+        { error: "Query or Category is required" },
         { status: 400, headers: corsHeaders() }
       );
     }
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
       // Max Price Filter
       if (filters.maxPrice) {
         filteredProducts = filteredProducts.filter(
-          (p) => p.pricePerSqm > 0 && p.pricePerSqm <= filters.maxPrice
+          (p) => p.pricePerSqm <= filters.maxPrice
         );
       }
 

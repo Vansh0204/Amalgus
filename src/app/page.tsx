@@ -32,7 +32,8 @@ export default function DiscoveryPage() {
   ];
 
   const handleSearch = async () => {
-    if (!query.trim()) return;
+    // Allow searching if there is a query OR a category selected
+    if (!query.trim() && !category) return;
     setLoading(true);
     try {
       const response = await fetch("/api/match", {
@@ -168,7 +169,7 @@ export default function DiscoveryPage() {
                 </div>
                 <button 
                   onClick={handleSearch}
-                  disabled={loading || !query.trim()}
+                  disabled={loading || (!query.trim() && !category)}
                   className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-bold py-4 px-10 rounded-xl transition-all shadow-lg active:scale-95"
                 >
                   {loading ? "Discovering..." : "Find Best Matches"}
